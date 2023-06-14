@@ -6,9 +6,11 @@ from discord import Intents, Message
 from discord.ext import commands
 from loguru import logger
 
-from _typing import Attachment, CallbackData
+from _mjtyping import Attachment, CallbackData
 from app.handler import PROMPT_PREFIX, PROMPT_SUFFIX
 from lib.api.callback import callback
+from lib.api import MJBOT_ID
+
 
 intents = Intents.default()
 intents.message_content = True
@@ -57,7 +59,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(message: Message):
-    if message.author.id != 936929561302675456:
+    if message.author.id != MJBOT_ID:
         return
 
     logger.debug(f"on_message: {message.content}")
@@ -90,7 +92,7 @@ async def on_message(message: Message):
 
 @bot.event
 async def on_message_edit(_: Message, after: Message):
-    if after.author.id != 936929561302675456:
+    if after.author.id != MJBOT_ID:
         return
 
     trigger_id = match_trigger_id(after.content)
@@ -113,7 +115,7 @@ async def on_message_edit(_: Message, after: Message):
 
 @bot.event
 async def on_message_delete(message: Message):
-    if message.author.id != 936929561302675456:
+    if message.author.id != MJBOT_ID:
         return
 
     trigger_id = match_trigger_id(message.content)

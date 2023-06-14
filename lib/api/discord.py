@@ -4,12 +4,16 @@ from typing import Dict, Any
 
 import aiohttp
 
-from lib.api import CHANNEL_ID, USER_TOKEN, GUILD_ID
+from lib.api import CHANNEL_ID, USER_TOKEN, GUILD_ID, MJAPP_ID
 from util.fetch import fetch
 
+#########################################################################
 TRIGGER_URL = "https://discord.com/api/v9/interactions"
 UPLOAD_URL = f"https://discord.com/api/v9/channels/{CHANNEL_ID}/attachments"
+mj_imagine_ID="938956540159881230"
+mj_imagine_Ver="1077969938624553050"
 
+#########################################################################
 
 class TriggerType(str, Enum):
     generate = "generate"
@@ -39,7 +43,7 @@ async def upload():
 def _trigger_payload(type_: int, data: Dict[str, Any], **kwargs) -> Dict[str, Any]:
     payload = {
         "type": type_,
-        "application_id": "936929561302675456",
+        "application_id": MJAPP_ID,
         "guild_id": GUILD_ID,
         "channel_id": CHANNEL_ID,
         "session_id": "cb06f61453064c0983f2adae2a88c223",
@@ -51,8 +55,8 @@ def _trigger_payload(type_: int, data: Dict[str, Any], **kwargs) -> Dict[str, An
 
 async def generate(prompt: str, **kwargs):
     payload = _trigger_payload(2, {
-        "version": "1077969938624553050",
-        "id": "938956540159881230",
+        "version": mj_imagine_Ver,
+        "id": mj_imagine_ID,
         "name": "imagine",
         "type": 1,
         "options": [{
@@ -61,18 +65,18 @@ async def generate(prompt: str, **kwargs):
             "value": prompt
         }],
         "application_command": {
-            "id": "938956540159881230",
-            "application_id": "936929561302675456",
-            "version":  "1077969938624553050",
+            "id": mj_imagine_ID,#命令id，固定值，app所有者可能会更改
+            "application_id": MJAPP_ID,
+            "version":  mj_imagine_Ver,#固定值，app所有者可能会更改
             "default_permission": True,
             "default_member_permissions": None,
-            "type": 1,
+            "type": 1,#chat_input即/command
             "nsfw": False,
             "name": "imagine",
             "description": "Create images with Midjourney",
             "dm_permission": True,
             "options": [{
-                "type": 3,
+                "type": 3,##字符串
                 "name": "prompt",
                 "description": "The prompt to imagine",
                 "required": True
